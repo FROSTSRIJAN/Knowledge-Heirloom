@@ -8,35 +8,62 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 255 255 255;
+    --foreground: 15 23 42;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Slack-inspired professional palette */
+    --primary: 98 70% 50%; /* Warm green - knowledge/growth */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 98 70% 60%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 13% 91%;
+    --secondary-foreground: 220 9% 46%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 142 71% 45%; /* Success green */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --warning: 45 93% 58%; /* Amber for notifications */
+    --warning-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --radius: 0.5rem;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 98 70% 50%;
+
+    /* Chat interface colors */
+    --chat-sidebar: 75 28% 15%; /* Dark green sidebar */
+    --chat-sidebar-foreground: 0 0% 100%;
+    --chat-sidebar-hover: 75 28% 20%;
+    
+    --chat-main: 0 0% 100%;
+    --chat-main-foreground: 15 23 42;
+    
+    --message-user: 220 14% 96%;
+    --message-bot: 98 70% 96%;
+    --message-system: 45 93% 95%;
+
+    /* Gradients for premium feel */
+    --gradient-primary: linear-gradient(135deg, hsl(98 70% 50%), hsl(142 71% 45%));
+    --gradient-glow: linear-gradient(135deg, hsl(98 70% 50% / 0.1), hsl(142 71% 45% / 0.1));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 14% 98%));
+
+    /* Shadows for depth */
+    --shadow-soft: 0 2px 8px hsl(220 13% 91% / 0.4);
+    --shadow-medium: 0 4px 16px hsl(220 13% 91% / 0.6);
+    --shadow-glow: 0 0 24px hsl(98 70% 50% / 0.15);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
