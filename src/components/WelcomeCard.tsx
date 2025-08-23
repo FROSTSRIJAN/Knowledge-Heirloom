@@ -5,37 +5,37 @@ import { Badge } from "@/components/ui/badge";
 
 const WelcomeCard = () => {
   return (
-    <Card className="p-6 bg-gradient-card border-primary/20 shadow-medium">
+    <Card className="p-6 bg-gradient-card border-primary/20 shadow-medium animate-scale-in">
       <div className="text-center mb-6">
-        <div className="h-16 w-16 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-glow">
+        <div className="h-16 w-16 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-glow animate-float">
           <Bot className="h-8 w-8 text-white" />
         </div>
-        <h1 className="text-2xl font-bold mb-2">Welcome to InternalDocs AI</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl font-bold mb-2 animate-fade-in" style={{ animationDelay: '0.2s' }}>Welcome to InternalDocs AI</h1>
+        <p className="text-muted-foreground animate-fade-in" style={{ animationDelay: '0.4s' }}>
           Your retiring developer's final gift — an AI that makes company knowledge accessible forever
         </p>
       </div>
 
       {/* Features */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="text-center p-4 rounded-lg bg-background/50">
-          <FileText className="h-8 w-8 text-primary mx-auto mb-2" />
+        <div className="text-center p-4 rounded-lg bg-background/50 transition-all duration-300 hover:scale-105 hover:shadow-soft animate-fade-in" style={{ animationDelay: '0.6s' }}>
+          <FileText className="h-8 w-8 text-primary mx-auto mb-2 animate-float" />
           <h3 className="font-semibold mb-1">Smart Search</h3>
           <p className="text-sm text-muted-foreground">
             Find any policy, process, or document instantly
           </p>
         </div>
         
-        <div className="text-center p-4 rounded-lg bg-background/50">
-          <Users className="h-8 w-8 text-accent mx-auto mb-2" />
+        <div className="text-center p-4 rounded-lg bg-background/50 transition-all duration-300 hover:scale-105 hover:shadow-soft animate-fade-in" style={{ animationDelay: '0.8s' }}>
+          <Users className="h-8 w-8 text-accent mx-auto mb-2 animate-float" style={{ animationDelay: '0.5s' }} />
           <h3 className="font-semibold mb-1">Context Aware</h3>
           <p className="text-sm text-muted-foreground">
             Answers tailored to your role and department
           </p>
         </div>
         
-        <div className="text-center p-4 rounded-lg bg-background/50">
-          <Zap className="h-8 w-8 text-warning mx-auto mb-2" />
+        <div className="text-center p-4 rounded-lg bg-background/50 transition-all duration-300 hover:scale-105 hover:shadow-soft animate-fade-in" style={{ animationDelay: '1s' }}>
+          <Zap className="h-8 w-8 text-warning mx-auto mb-2 animate-float" style={{ animationDelay: '1s' }} />
           <h3 className="font-semibold mb-1">Proactive Help</h3>
           <p className="text-sm text-muted-foreground">
             Get suggestions and guidance before you ask
@@ -44,7 +44,7 @@ const WelcomeCard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="space-y-3">
+      <div className="space-y-3 animate-fade-in" style={{ animationDelay: '1.2s' }}>
         <h3 className="font-semibold text-center mb-3">Try asking me about:</h3>
         <div className="flex flex-wrap gap-2 justify-center">
           {[
@@ -54,8 +54,13 @@ const WelcomeCard = () => {
             "Expense Claims",
             "PTO Requests",
             "Equipment Setup"
-          ].map((topic) => (
-            <Badge key={topic} variant="outline" className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors">
+          ].map((topic, index) => (
+            <Badge 
+              key={topic} 
+              variant="outline" 
+              className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-105 hover:shadow-soft animate-fade-in"
+              style={{ animationDelay: `${1.3 + index * 0.1}s` }}
+            >
               {topic}
             </Badge>
           ))}
@@ -63,9 +68,10 @@ const WelcomeCard = () => {
       </div>
 
       {/* CTA */}
-      <div className="mt-6 text-center">
-        <Button className="bg-gradient-primary shadow-glow">
-          Start Exploring <ArrowRight className="h-4 w-4 ml-2" />
+      <div className="mt-6 text-center animate-fade-in" style={{ animationDelay: '1.8s' }}>
+        <Button className="bg-gradient-primary shadow-glow transition-all duration-300 hover:scale-105 hover:shadow-medium group">
+          Start Exploring 
+          <ArrowRight className="h-4 w-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
         </Button>
       </div>
     </Card>

@@ -26,15 +26,15 @@ const ChatInput = ({ onSendMessage, placeholder = "Ask me anything about company
   };
 
   return (
-    <div className="border-t bg-background p-4">
+    <div className="border-t bg-background p-4 animate-slide-in-right">
       <div className="flex items-end gap-2">
         {/* Attachment button */}
         <Button
           variant="ghost"
           size="sm"
-          className="h-10 w-10 p-0 flex-shrink-0"
+          className="h-10 w-10 p-0 flex-shrink-0 transition-all duration-300 hover:scale-110 hover:bg-primary/10"
         >
-          <Paperclip className="h-4 w-4" />
+          <Paperclip className="h-4 w-4 transition-transform duration-300 hover:rotate-12" />
         </Button>
 
         {/* Input field */}
@@ -44,7 +44,7 @@ const ChatInput = ({ onSendMessage, placeholder = "Ask me anything about company
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder={placeholder}
-            className="pr-20 resize-none min-h-[40px] py-3"
+            className="pr-20 resize-none min-h-[40px] py-3 transition-all duration-300 focus:shadow-glow focus:scale-[1.01]"
           />
           
           {/* Input actions */}
@@ -52,16 +52,16 @@ const ChatInput = ({ onSendMessage, placeholder = "Ask me anything about company
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0"
+              className="h-6 w-6 p-0 transition-all duration-300 hover:scale-110 hover:bg-primary/10"
             >
-              <Smile className="h-4 w-4" />
+              <Smile className="h-4 w-4 transition-transform duration-300 hover:rotate-12" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0"
+              className="h-6 w-6 p-0 transition-all duration-300 hover:scale-110 hover:bg-primary/10"
             >
-              <Mic className="h-4 w-4" />
+              <Mic className="h-4 w-4 transition-transform duration-300 hover:scale-110" />
             </Button>
           </div>
         </div>
@@ -70,26 +70,27 @@ const ChatInput = ({ onSendMessage, placeholder = "Ask me anything about company
         <Button
           onClick={handleSend}
           disabled={!message.trim()}
-          className="h-10 w-10 p-0 bg-gradient-primary hover:opacity-90 shadow-glow"
+          className="h-10 w-10 p-0 bg-gradient-primary hover:opacity-90 shadow-glow transition-all duration-300 hover:scale-110 hover:shadow-medium disabled:opacity-50 disabled:scale-100"
         >
-          <Send className="h-4 w-4" />
+          <Send className="h-4 w-4 transition-transform duration-300 hover:translate-x-0.5" />
         </Button>
       </div>
 
       {/* Quick suggestions */}
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-3 flex flex-wrap gap-2 animate-fade-in" style={{ animationDelay: '0.2s' }}>
         {[
           "What's our refund policy?",
           "How do I request design assets?",
           "PTO request process",
           "Expense claim guidelines"
-        ].map((suggestion) => (
+        ].map((suggestion, index) => (
           <Button
             key={suggestion}
             variant="outline"
             size="sm"
             onClick={() => setMessage(suggestion)}
-            className="text-xs"
+            className="text-xs transition-all duration-300 hover:scale-105 hover:shadow-soft hover:bg-primary/10 animate-fade-in"
+            style={{ animationDelay: `${0.3 + index * 0.1}s` }}
           >
             {suggestion}
           </Button>

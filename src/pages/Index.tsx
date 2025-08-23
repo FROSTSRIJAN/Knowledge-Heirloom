@@ -4,6 +4,7 @@ import ChatHeader from "@/components/ChatHeader";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 import WelcomeCard from "@/components/WelcomeCard";
+import TypingIndicator from "@/components/TypingIndicator";
 
 interface Message {
   id: string;
@@ -30,6 +31,7 @@ const Index = () => {
       isWelcome: true
     }
   ]);
+  const [isTyping, setIsTyping] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -39,7 +41,7 @@ const Index = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const handleSendMessage = (content: string) => {
     const userMessage: Message = {
@@ -51,12 +53,18 @@ const Index = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    
+    // Show typing indicator
+    setIsTyping(true);
 
-    // Simulate AI response
+    // Simulate realistic AI response timing (1.5-3 seconds based on complexity)
+    const responseTime = content.length > 50 ? 3000 : content.length > 20 ? 2000 : 1500;
+    
     setTimeout(() => {
+      setIsTyping(false);
       const botResponse = generateBotResponse(content);
       setMessages(prev => [...prev, botResponse]);
-    }, 1000);
+    }, responseTime);
   };
 
   const generateBotResponse = (userQuery: string): Message => {
@@ -193,6 +201,10 @@ const Index = () => {
               isWelcome={message.isWelcome}
             />
           ))}
+          
+          {/* Typing Indicator */}
+          {isTyping && <TypingIndicator />}
+          
           <div ref={messagesEndRef} />
         </div>
         
