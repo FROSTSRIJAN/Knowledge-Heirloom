@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  password      String
+  role          String   @default("EMPLOYEE") // "EMPLOYEE", "ADMIN", "SENIOR_DEV"
+  profileImage  String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lastLogin     DateTime?
+
+  // Relations
+  conversations Conversation[]
+  legacyMessages LegacyMessage[] @relation("SeniorDeveloper")
+  analytics     Analytics[]
+  knowledgeBase KnowledgeBase[]
+  documents     Document[]
+
+  @@map("users")
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  title     String?
+  userId    String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String      @id @default(cuid())
+  content        String
+  type           String      // "USER", "BOT", "SYSTEM"
+  conversationId String
+  createdAt      DateTime    @default(now())
+  
+  // Optional AI metadata
+  aiModel        String?
+  tokensUsed     Int?
+  responseTime   Int? // in milliseconds
+  
+  // Relations
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model LegacyMessage {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  category    String? // "wisdom", "farewell", "technical", "motivational"
+  isPublic    Boolean  @default(true)
+  seniorDevId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Metadata for special features
+  audioUrl    String? // For TTS feature
+  isSpecial   Boolean @default(false) // For special occasion messages
+  
+  // Relations
+  seniorDev User @relation("SeniorDeveloper", fields: [seniorDevId], references: [id])
+
+  @@map("legacy_messages")
+}
+
+model Analytics {
+  id            String   @id @default(cuid())
+  userId        String
+  queryCount    Int      @default(0)
+  totalTokens   Int      @default(0)
+  avgResponseTime Float  @default(0)
+  lastActivity  DateTime @default(now())
+  date          DateTime @default(now())
+  
+  // Daily/Monthly tracking
+  dailyQueries  Int      @default(0)
+  
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, date])
+  @@map("analytics")
+}
+
+model KnowledgeBase {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  category    String
+  tags        String   // JSON string of array: "[\"tag1\", \"tag2\"]"
+  isActive    Boolean  @default(true)
+  priority    Int      @default(1) // For search ranking
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Document metadata
+  source      String   @default("manual") // "upload", "synthetic", "kaggle", "huggingface"
+  fileType    String?  // "pdf", "txt", "md", "docx"
+  filePath    String?  // Path to uploaded file
+  fileSize    Int?     // File size in bytes
+  
+  // AI and search features
+  embeddings  String? // Vector embeddings for semantic search
+  summary     String? // AI-generated summary
+  keyWords    String   // JSON string of array: "[\"keyword1\", \"keyword2\"]"
+  
+  // Relations
+  uploadedBy  String?
+  user        User?    @relation(fields: [uploadedBy], references: [id])
+  
+  @@map("knowledge_base")
+}
+
+model Document {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String
+  filePath     String
+  fileType     String
+  fileSize     Int
+  mimeType     String
+  
+  // Processing status
+  processed    Boolean  @default(false)
+  extractedText String?
+  summary      String?
+  
+  // Metadata
+  uploadedBy   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  user         User     @relation(fields: [uploadedBy], references: [id])
+  
+  @@map("documents")
+}
+
+model Dataset {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  source      String   // "kaggle", "huggingface", "synthetic", "custom"
+  dataType    String   // "text", "csv", "json"
+  filePath    String?
+  recordCount Int      @default(0)
+  isActive    Boolean  @default(true)
+  
+  // Processing metadata
+  processed   Boolean  @default(false)
+  processedAt DateTime?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("datasets")
+}

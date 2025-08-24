@@ -1,80 +1,125 @@
-import { Bot, FileText, Users, Zap, ArrowRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { 
+  Bot, 
+  Sparkles, 
+  MessageSquare, 
+  Upload,
+  FileText,
+  ArrowRight
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { User } from "@/services/api";
 
-const WelcomeCard = () => {
+interface WelcomeCardProps {
+  user?: User;
+  onStartConversation?: (prompt: string) => void;
+}
+
+const WelcomeCard = ({ user, onStartConversation }: WelcomeCardProps) => {
+  const quickPrompts = [
+    {
+      icon: MessageSquare,
+      title: "Ask a Question",
+      prompt: "Hello! I'm ready to explore your AI capabilities.",
+      description: "Start a conversation with your AI assistant"
+    },
+    {
+      icon: Upload,
+      title: "Upload Document",
+      prompt: "I'd like to upload a document for analysis",
+      description: "Upload PDFs, docs, or text files for AI analysis"
+    },
+    {
+      icon: FileText,
+      title: "Get Help",
+      prompt: "Can you help me understand how to use this system?",
+      description: "Learn about features and capabilities"
+    }
+  ];
+
+  const handleQuickStart = (prompt: string) => {
+    if (onStartConversation) {
+      onStartConversation(prompt);
+    }
+  };
+
   return (
-    <Card className="p-6 bg-gradient-card border-primary/20 shadow-medium animate-scale-in">
-      <div className="text-center mb-6">
-        <div className="h-16 w-16 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-glow animate-float">
-          <Bot className="h-8 w-8 text-white" />
-        </div>
-        <h1 className="text-2xl font-bold mb-2 animate-fade-in" style={{ animationDelay: '0.2s' }}>Welcome to InternalDocs AI</h1>
-        <p className="text-muted-foreground animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          Your retiring developer's final gift — an AI that makes company knowledge accessible forever
-        </p>
-      </div>
-
-      {/* Features */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="text-center p-4 rounded-lg bg-background/50 transition-all duration-300 hover:scale-105 hover:shadow-soft animate-fade-in" style={{ animationDelay: '0.6s' }}>
-          <FileText className="h-8 w-8 text-primary mx-auto mb-2 animate-float" />
-          <h3 className="font-semibold mb-1">Smart Search</h3>
-          <p className="text-sm text-muted-foreground">
-            Find any policy, process, or document instantly
+    <div className="max-w-4xl mx-auto space-y-6 p-6">
+      {/* Main Welcome Header */}
+      <Card className="bg-gradient-to-r from-blue-900/90 to-purple-900/90 border-blue-500/30 backdrop-blur text-white">
+        <CardHeader className="text-center pb-4">
+          <div className="flex justify-center mb-4">
+            <div className="h-16 w-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center p-2">
+              <img 
+                src="/autobot-from-transformers-logo-png-transparent.png" 
+                alt="Knowledge Heirloom Logo" 
+                className="h-10 w-10"
+              />
+            </div>
+          </div>
+          <CardTitle className="text-3xl font-bold mb-2">
+            Welcome to Knowledge Heirloom
+          </CardTitle>
+          <p className="text-blue-200 text-lg">
+            {user ? `Hello ${user.name}! ` : ''}Your intelligent AI assistant powered by Gemini AI
           </p>
-        </div>
-        
-        <div className="text-center p-4 rounded-lg bg-background/50 transition-all duration-300 hover:scale-105 hover:shadow-soft animate-fade-in" style={{ animationDelay: '0.8s' }}>
-          <Users className="h-8 w-8 text-accent mx-auto mb-2 animate-float" style={{ animationDelay: '0.5s' }} />
-          <h3 className="font-semibold mb-1">Context Aware</h3>
-          <p className="text-sm text-muted-foreground">
-            Answers tailored to your role and department
+        </CardHeader>
+        <CardContent className="text-center">
+          <p className="text-gray-300 mb-6">
+            Ask questions, upload documents, explore knowledge, and get instant AI-powered insights.
           </p>
-        </div>
-        
-        <div className="text-center p-4 rounded-lg bg-background/50 transition-all duration-300 hover:scale-105 hover:shadow-soft animate-fade-in" style={{ animationDelay: '1s' }}>
-          <Zap className="h-8 w-8 text-warning mx-auto mb-2 animate-float" style={{ animationDelay: '1s' }} />
-          <h3 className="font-semibold mb-1">Proactive Help</h3>
-          <p className="text-sm text-muted-foreground">
-            Get suggestions and guidance before you ask
-          </p>
-        </div>
-      </div>
+          <Button 
+            onClick={() => handleQuickStart("Hello! I'm ready to explore your AI capabilities.")}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 text-lg"
+          >
+            <Sparkles className="h-5 w-5 mr-2" />
+            Start Chatting
+            <ArrowRight className="h-5 w-5 ml-2" />
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Quick Actions */}
-      <div className="space-y-3 animate-fade-in" style={{ animationDelay: '1.2s' }}>
-        <h3 className="font-semibold text-center mb-3">Try asking me about:</h3>
-        <div className="flex flex-wrap gap-2 justify-center">
-          {[
-            "HR Policies",
-            "Design Guidelines", 
-            "Tech Documentation",
-            "Expense Claims",
-            "PTO Requests",
-            "Equipment Setup"
-          ].map((topic, index) => (
-            <Badge 
-              key={topic} 
-              variant="outline" 
-              className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-105 hover:shadow-soft animate-fade-in"
-              style={{ animationDelay: `${1.3 + index * 0.1}s` }}
-            >
-              {topic}
-            </Badge>
-          ))}
-        </div>
+      <div className="grid md:grid-cols-3 gap-4">
+        {quickPrompts.map((prompt, index) => (
+          <Card 
+            key={index}
+            className="bg-gray-800/80 border-gray-600/50 backdrop-blur hover:bg-gray-700/80 transition-all duration-300 cursor-pointer group"
+            onClick={() => handleQuickStart(prompt.prompt)}
+          >
+            <CardContent className="p-6 text-center">
+              <div className="flex justify-center mb-4">
+                <div className="h-12 w-12 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
+                  <prompt.icon className="h-6 w-6 text-blue-400" />
+                </div>
+              </div>
+              <h3 className="font-semibold text-white mb-2">{prompt.title}</h3>
+              <p className="text-gray-400 text-sm">{prompt.description}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* CTA */}
-      <div className="mt-6 text-center animate-fade-in" style={{ animationDelay: '1.8s' }}>
-        <Button className="bg-gradient-primary shadow-glow transition-all duration-300 hover:scale-105 hover:shadow-medium group">
-          Start Exploring 
-          <ArrowRight className="h-4 w-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-        </Button>
-      </div>
-    </Card>
+      {/* Simple Stats */}
+      <Card className="bg-gray-800/50 border-gray-600/30 backdrop-blur">
+        <CardContent className="p-6">
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <div className="text-2xl font-bold text-blue-400">24/7</div>
+              <div className="text-gray-400 text-sm">Available</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-green-400">100%</div>
+              <div className="text-gray-400 text-sm">Secure</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-purple-400">∞</div>
+              <div className="text-gray-400 text-sm">Possibilities</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

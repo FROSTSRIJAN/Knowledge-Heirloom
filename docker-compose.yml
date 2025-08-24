@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8081/api
+    depends_on:
+      - backend
+    networks:
+      - knowledge-heirloom
+
+  backend:
+    build: ./backend
+    ports:
+      - "8081:8081"
+    environment:
+      - NODE_ENV=production
+      - PORT=8081
+      - DATABASE_URL=file:./production.db
+      - JWT_SECRET=hackathon-winner-jwt-secret-2025
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FRONTEND_URL=http://localhost:8080
+    volumes:
+      - backend-data:/app/production.db
+    networks:
+      - knowledge-heirloom
+
+networks:
+  knowledge-heirloom:
+    driver: bridge
+
+volumes:
+  backend-data:
