@@ -2,8 +2,8 @@ const axios = require('axios');
 
 async function testLogin() {
   try {
-    console.log('Testing demo login...');
-    const response = await axios.post('http://localhost:8081/api/demo/auth/login', {
+    console.log('Testing auth login...');
+    const response = await axios.post('http://localhost:8081/api/auth/login', {
       email: 'junior@knowledgeheirloom.com',
       password: 'password123'
     });
