@@ -82,44 +82,73 @@ router.post('/document', upload.single('file'), asyncHandler(async (req: any, re
     // Generate summary using AI (first 200 words)
     const summary = extractedText.substring(0, 200).trim() + (extractedText.length > 200 ? '...' : '');
 
-    // Save document information to database (if you have a documents table)
-    // For now, let's create a knowledge entry
-    const knowledgeEntry = {
-      title: title,
-      content: extractedText,
-      summary: summary,
-      category: 'document',
-      source: 'upload',
-      priority: 5,
-      fileType: req.file.mimetype,
-      fileSize: req.file.size,
-      uploadedBy: userName,
-      tags: ['uploaded', 'document'],
-      keyWords: extractedText.split(' ')
-        .filter(word => word.length > 3)
-        .slice(0, 10)
-        .map(word => word.toLowerCase().replace(/[^a-z]/g, ''))
-        .filter(word => word.length > 0)
-    };
+    // Extract keywords and tags
+    const keywords = extractedText.split(' ')
+      .filter(word => word.length > 3)
+      .slice(0, 20)
+      .map(word => word.toLowerCase().replace(/[^a-z]/g, ''))
+      .filter(word => word.length > 0);
 
-    logger.info(`Document processed: ${req.file.originalname} by user ${userId}`, {
+    const tags = ['uploaded', 'document', path.extname(req.file.originalname).substring(1)];
+
+    // Save to knowledge base
+    const knowledgeEntry = await prisma.knowledgeBase.create({
+      data: {
+        title: title,
+        content: extractedText,
+        summary: summary,
+        category: 'document',
+        source: 'upload',
+        priority: 5,
+        fileType: req.file.mimetype,
+        fileSize: req.file.size,
+        filePath: req.file.filename,
+        uploadedBy: userId,
+        tags: JSON.stringify(tags),
+        keyWords: JSON.stringify(keywords)
+      }
+    });
+
+    // Also create a document record
+    const document = await prisma.document.create({
+      data: {
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        filePath: req.file.path,
+        fileType: path.extname(req.file.originalname),
+        fileSize: req.file.size,
+        mimeType: req.file.mimetype,
+        processed: true,
+        extractedText: extractedText,
+        summary: summary,
+        uploadedBy: userId
+      }
+    });
+
+    logger.info(`Document processed and saved: ${req.file.originalname} by user ${userId}`, {
+      knowledgeId: knowledgeEntry.id,
+      documentId: document.id,
       fileSize: req.file.size,
       extractedLength: extractedText.length
     });
 
-    // Clean up uploaded file
-    fs.unlinkSync(req.file.path);
+    // Clean up uploaded file (keep it if you want to access later)
+    // fs.unlinkSync(req.file.path);
 
     res.json({
       success: true,
       message: '📄 Document uploaded and processed successfully!',
       document: {
+        id: document.id,
+        knowledgeId: knowledgeEntry.id,
         title: knowledgeEntry.title,
         summary: knowledgeEntry.summary,
         fileType: req.file.mimetype,
         fileSize: req.file.size,
         wordCount: extractedText.split(' ').length,
-        extractedText: extractedText.substring(0, 500) + (extractedText.length > 500 ? '...' : '')
+        extractedText: extractedText.substring(0, 500) + (extractedText.length > 500 ? '...' : ''),
+        tags: tags,
+        keywords: keywords.slice(0, 10)
       }
     });
 

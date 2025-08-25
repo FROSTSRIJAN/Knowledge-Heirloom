@@ -38,10 +38,9 @@ router.get('/', asyncHandler(async (req: any, res: express.Response) => {
 
   if (search) {
     whereCondition.OR = [
-      { title: { contains: search, mode: 'insensitive' } },
-      { content: { contains: search, mode: 'insensitive' } },
-      { summary: { contains: search, mode: 'insensitive' } },
-      { keyWords: { hasSome: [search] } }
+      { title: { contains: search } },
+      { content: { contains: search } },
+      { summary: { contains: search } }
     ];
   }
 
@@ -238,10 +237,9 @@ router.post('/search', asyncHandler(async (req: any, res: express.Response) => {
   // Text search across multiple fields
   if (query) {
     whereCondition.OR = [
-      { title: { contains: query, mode: 'insensitive' } },
-      { content: { contains: query, mode: 'insensitive' } },
-      { summary: { contains: query, mode: 'insensitive' } },
-      { keyWords: { hasSome: query.split(' ') } }
+      { title: { contains: query } },
+      { content: { contains: query } },
+      { summary: { contains: query } }
     ];
   }
 
